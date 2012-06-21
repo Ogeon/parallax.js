@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Parallax README</title>
+  	<link rel="stylesheet" title="Zenburn" href="highlight/styles/zenburn.css">
+	<script src="highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<link rel="stylesheet" type="text/css" href="readme-style.css">
+</head>
+<body>
+	<h1>Parallax README</h1>
+
+	<section>
+		<article>
+			<h2>Parallax</h2>
+			<p>Type: JavaScript namespace</p>
+			<p>
+				The Parallax object contains all the system methods necessary to
+				use it.	This is the only object one usually need to make things
+				work.
+			</p>
+
+			<h3>Methods</h3>
+			<table>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">Parallax.init</span><span class="value">()</span></span></pre>
+					</td>
+					<td>
+						Initiates the parallax effects. Should be called when
+						the page has finnished loading (window.onload or later).
+						It can safely be called	multiple times.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">Parallax.onscroll</span><span class="value">()</span></span></pre>
+					</td>
+					<td>
+						Updates all parallax elements. It should be called when
+						the user has scrolled the page (window.onscroll is
+						prefered).
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">Parallax.onresize</span><span class="value">()</span></span></pre>
+					</td>
+					<td>
+						Updates all parallax elements with a new window size.
+						It should be called when the user has resized the window
+						(window.onresize is	prefered).
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">Parallax.enable</span><span class="value">(enable)</span></span></pre>
+					</td>
+					<td>
+						Enables or disables the parallax effects. It will stop
+						the initiation of the effects if called with false
+						before Parallax.init() is called. The parallax effects
+						are enabled as default.
+
+						<h4>Parameters:</h4>
+						<ul>
+						<li><b>enable</b> [boolean] - pass true if the parallax effects should be used. Pass false
+								otherwise.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">Parallax.addElement</span><span class="value">(parallaxObject)</span></span></pre>
+					</td>
+					<td>
+						Use this to programatically add more parallax elements.
+
+						<h4>Parameters:</h4>
+						<ul>
+						<li><b>parallaxObject</b> [Any parallax object] - The object to add into the parallax system.</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+
+			<h3>Examples</h3>
+			<pre><code>var enableParallax = true;
+
+window.onload = Parallax.init;
+window.onscroll = Parallax.onscroll;
+window.onresize = Parallax.onresize;
+
+myButton.onclick = function() {
+	enableParallax = !enableParallax; //Toggle enableParallax
+	Parallax.enable(enableParallax);
+}
+</code></pre>
+		</article>
+
+
+		<article>
+			<h2>ParallaxSection</h2>
+			<p>
+				These are blocks tags where parallax effects are applied. These	can contain other elements with different effects. The
+				background image should be longer than the section box, contain a single
+				object with	transparent background or be tiled for a good effect.
+			</p>
+
+			<h3>Auto initializing conditions</h3>
+			<p>HTML tags: &lt;section&gt;, &lt;div&gt;</p>
+			<p>Class name: parallax</p>
+
+			<h3>HTML Attributes</h3>
+			<table>
+				<tr>
+					<td>
+						<pre class="xml"><span class="tag"><span class="attribute">data-speed</span>=<span class="value">"[float]"</span></span>
+[Optional]</pre>
+					</td>
+					<td>The speed of the parallax movement relative to the scroll
+						speed*. Values smaller than 0 will make the movement slower than
+						the scroll speed while values larger than 0 will make it faster.
+						The	value -1 will make the background follow the page movement
+						like normal	backgrounds do. -1 is also the default value when
+						data-speed is omitted.<br/><br/>
+
+						*Think camera movement.
+					</td>
+				</tr>
+			</table>
+
+			<h3>JavaScript Methods</h3>
+			<table>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">ParallaxSection</span><span class="value">(DOMElement)</span></span></pre>
+					</td>
+					<td>The constructor for the parallax element.
+
+						<h4>Parameters:</h4>
+						<ul>
+						<li><b>DOMElement</b> [DOMObject] - The object to which the effects will be applyed.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">setSpeed</span><span class="value">(speed)</span></span></pre>
+					</td>
+					<td>Changes the parallax speed of the object. See the HTML
+						attribute data-speed above for more information.
+
+						<h4>Parameters:</h4>
+						<ul>
+						<li><b>speed</b> [float] - The new parallax speed.</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+
+			<h3>Examples</h3>
+			<pre><code class="html">&lt;section id="myCoolSection" class="parallax" data-speed="-.2"&gt;
+&lt;div id="myEvenCoolerDiv" class="parallax" data-speed=".4"&gt;&lt;/div&gt;
+&lt;/section&gt;</code></pre>
+		</article>
+
+		<article>
+			<h2>ParallaxMap</h2>
+			<p>
+				These are blocks tags containing a Google Map to which parallax 
+				effects are applied. These can allso contain other elements with
+				different effects.
+			</p>
+			<p>
+				This type uses the Google Map api, it has to be manually
+				initialized. See the example below.
+			</p>
+
+			<h3>Auto initializing conditions</h3>
+			<p>None</p>
+
+			<h3>HTML Attributes</h3>
+			<table>
+				<tr>
+					<td>
+						<pre class="xml"><span class="tag"><span class="attribute">data-speed</span>=<span class="value">"[float]"</span></span>
+[Optional]</pre>
+					</td>
+					<td>The speed of the parallax movement relative to the scroll
+						speed*. Values smaller than 0 will make the movement slower than
+						the scroll speed while values larger than 0 will make it faster.
+						The	value -1 will make the map follow the page movement
+						like normal	elements do. -1 is also the default value when
+						data-speed is omitted.<br/><br/>
+
+						*Think camera movement.
+					</td>
+				</tr>
+			</table>
+
+			<h3>JavaScript Methods</h3>
+			<table>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">ParallaxMap</span><span class="value">(DOMElement, googleMap)</span></span></pre>
+					</td>
+					<td>The constructor for the parallax element.
+
+						<h4>Parameters:</h4>
+						<ul>
+							<li><b>DOMElement</b> [DOMObject] - The object to which the effects will be applyed.</li>
+							<li><b>googleMap</b> [google.maps.Map] - The google map object connected to the element.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<pre><span class="function"><span class="keyword">setSpeed</span><span class="value">(speed)</span></span></pre>
+					</td>
+					<td>Changes the parallax speed of the object. See the HTML
+						attribute data-speed above for more information.
+
+						<h4>Parameters:</h4>
+						<ul>
+							<li><b>speed</b> [float] - The new parallax speed.</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+
+			<h3>Examples</h3>
+			<h4>The JavaScript part:</h4>
+			<pre><code class="html">//Google Map settings and stuff
+
+var element = document.getElementById("myMapCanvas");
+var map = new google.maps.Map(element, settings);
+Parallax.addElement(new ParallaxMap(element, mapObject));</code></pre>
+			<h4>The JavaScript part:</h4>
+			<pre><code class="html">&lt;section id="myMapCanvas" data-speed="-.2"&gt;
+&lt;!-- This is where the map goes. See the Google Map api for info about thet --&gt;
+&lt;/section&gt;</code></pre>
+		</article>
+
+	</section>
+</body>
+</html>
