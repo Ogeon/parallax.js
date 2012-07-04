@@ -7,6 +7,10 @@ var Parallax = {
 	scrollTimeout: null,
 	useParallax: true,
 	windowSize: null,
+	
+	elementTypes: new Object(),
+	scrollObjects: new Object(),
+	elements: new Array(),
 
 
 	/**
@@ -46,6 +50,35 @@ var Parallax = {
 		Parallax.step(true);
 			
 	},
+	
+	autoInit: function() {
+		Parallax.init();
+		Parallax.searchDocument();
+	},
+	
+	searchDocument: function() {
+		var checkElement = function(element) {
+			if(element.className) {
+				var classes = element.className.split(" ");
+				for(var n = classes.length; n--;) {
+					if(Parallax.elementTypes[classes[n]])
+						Parallax.add(new (Parallax.elementTypes[classes[n]])(element))
+				}
+			}
+		};
+		
+		var searchChildren = function(element) {
+			var children = element.childNodes;
+			for(var i = children.length; i--;) {
+				var child = children[i];
+				checkElement(child);
+				searchChildren(child);
+			}
+		};
+		
+		checkElement(document.body);
+		searchChildren(document.body);
+	},
 
 	/**
 	 * This method should be called when the user scrolls the page.
@@ -75,9 +108,16 @@ var Parallax = {
 		var offset = Parallax.scrollOffset;
 		//Only run when the position actually changes
 		if(offset != Parallax.scrollPosition || force) {
-			var sections = Parallax.sections;
-			for(var i = sections.length; i--;) {
-					sections[i].update(offset);
+			var scrollObjects = Parallax.scrollObjects;
+			for (var k in scrollObjects) {
+				if (scrollObjects.hasOwnProperty(k)) {
+					scrollObjects[k].update();
+				}
+			}
+			
+			var elements = Parallax.elements;
+			for(var i = elements.length; i--;) {
+					elements[i].update();
 			}
 
 			Parallax.scrollPosition = Parallax.scrollOffset;
@@ -103,9 +143,34 @@ var Parallax = {
 	enable: function(enable) {
 		Parallax.useParallax = enable;
 	},
+	
+	add: function(parallaxElement) {
+		Parallax.elements.push(parallaxElement);
+	},
+	
+	getScrollObject: function(element) {
+		var object = Parallax.scrollObjects[element];
+		if(typeof object == "undefined") {
+			object = new Parallax.ScrollObject(element);
+			Parallax.scrollObjects[element] = object;
+		}
+		
+		return object;
+	},
 
 	addElement: function(parallaxElement) {
 		Parallax.sections.push(parallaxElement);
+	},
+	
+	windowWidth: function() {
+		var winW = 0;
+
+		if(Parallax.windowSize == null)
+			Parallax.updateWindowSize();
+
+		winW = Parallax.windowSize[0];
+
+		return winW;
 	},
 
 	windowHeight: function() {
@@ -137,6 +202,38 @@ var Parallax = {
 		}
 
 		Parallax.windowSize = [winW, winH];
+	}
+};
+
+Parallax.ScrollObject = function(element) {
+	this.target = element;
+	this.position = [0, 0];
+	this.inside = false;
+	
+	this.update = function() {
+		var bounds = this.target.getBoundingClientRect();
+		this.position = [
+				(bounds.left + bounds.right)/2 - Parallax.windowWidth()/2,
+				(bounds.top + bounds.bottom)/2 - Parallax.windowHeight()/2
+			];
+		console.log(this.position);
+		this.inside =
+				bounds.right >= 0 && bounds.left <= Parallax.windowWidth() &&
+				bounds.bottom >= 0 && bounds.top <= Parallax.windowHeight();
+	};
+	
+	this.getOffset = function(relative) {
+		if(relative)
+			return {
+					x: this.position[0]/Parallax.windowWidth(),
+					y: this.position[1]/Parallax.windowHeight()
+				};
+		else
+			return {x: this.position[0], y: this.position[1]};
+	};
+	
+	this.inView = function() {
+		return this.inside;
 	}
 };
 		
