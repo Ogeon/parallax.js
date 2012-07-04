@@ -162,6 +162,32 @@ var Parallax = {
 		Parallax.sections.push(parallaxElement);
 	},
 	
+	parseParametersFromElement: function(element) {
+		var parameters = new Object();
+		
+		if(element.getAttribute("data-parallax")) {
+			var paramStrings = element.getAttribute("data-parallax").split(";");
+			
+			for(var i = paramStrings.length; i--;) {
+				var pair = paramStrings[i].split(":");
+				if(pair.length != 2)
+					continue;
+				
+				var value = pair[1].trim();
+			
+				if(value.toLowerCase() == "true" || value.toLowerCase() == "false")
+					parameters[pair[0].trim()] = value.toLowerCase() == "true";
+				else if((value.endsWith("px") || value.endsWith("%")) && typeof parseFloat(value) != "NaN")
+					parameters[pair[0].trim()] = value;
+				else if(typeof parseFloat(value) != "NaN")
+					parameters[pair[0].trim()] = parseFloat(value);
+			}
+		}
+		
+		console.log(parameters);
+		return parameters;
+	},
+	
 	windowWidth: function() {
 		var winW = 0;
 
@@ -216,7 +242,7 @@ Parallax.ScrollObject = function(element) {
 				(bounds.left + bounds.right)/2 - Parallax.windowWidth()/2,
 				(bounds.top + bounds.bottom)/2 - Parallax.windowHeight()/2
 			];
-		console.log(this.position);
+		
 		this.inside =
 				bounds.right >= 0 && bounds.left <= Parallax.windowWidth() &&
 				bounds.bottom >= 0 && bounds.top <= Parallax.windowHeight();
@@ -236,4 +262,16 @@ Parallax.ScrollObject = function(element) {
 		return this.inside;
 	}
 };
-		
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
+if(typeof(String.prototype.trim) === "undefined")
+{
+    String.prototype.trim = function() 
+    {
+        return String(this).replace(/^\s+|\s+$/g, '');
+    };
+}
+

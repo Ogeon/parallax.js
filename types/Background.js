@@ -1,11 +1,10 @@
 Parallax.Background = function(element, parameters) {
 	this.target = element;
 	this.scrollObject = Parallax.getScrollObject(element);
-	this.relative = true;
+	this.relative = false;
 	
 	
 	this.update = function() {
-		console.log(this.scrollObject.inView());
 		if(!this.scrollObject.inView())
 			return;
 		
@@ -24,6 +23,8 @@ Parallax.Background = function(element, parameters) {
 	};
 	
 	this.setParameters(parameters);
+	var elementParameters = Parallax.parseParametersFromElement(element);
+	this.setParameters(elementParameters);
 };
 
 Parallax.elementTypes["ParallaxBackground"] = Parallax.Background;
