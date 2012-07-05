@@ -78,6 +78,7 @@ var Parallax = {
 		
 		checkElement(document.body);
 		searchChildren(document.body);
+		Parallax.step(true);
 	},
 
 	/**

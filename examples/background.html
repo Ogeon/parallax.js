@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Parallax Background examples</title>
+		<title>Parallax effect examples</title>
 		<script type="text/javascript" src="../Parallax.js"></script>
 		<script type="text/javascript" src="../types/Background.js"></script>
 		
@@ -13,18 +13,59 @@
 		</script>
 		
 		<style>
-			body {
+			html {
+				min-height: 100%;
 			}
 			
-			section {
+			body {
+				background: url(http://subtlepatterns.com/patterns/greyfloral.png);
+				height: 100%;
+				margin: 0;
+				text-align: center;
+				font-family: verdana, arial, sans-serif;
+			}
+			
+			section, h1 {
+				width: 600px;
 				display: block;
-				height: 800px;
+				margin: 30px auto;
+				background: white;
+				border: 10px solid white;
+				text-align: left;
+				box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+			}
+			
+			h1 {
+				text-align: center;
+				padding: 20px 0;
+				font-size: 250%;
+			}
+			
+			section p {
+				margin: 30px 50px;
+			}
+			
+			article {
+				display: block;
+				margin: 0;
+				width: 100%;
+				min-height: 100%;
+				overflow: hidden;
+			}
+			
+			#intro {
+				height: 400px;
 			}
 		</style>
 	</head>
-	<body class="ParallaxBackground">
-		<section>
-			
+	<body class="ParallaxBackground" data-parallax="deapth: 1;">
+		<article>
+		<h1>Parallax effect examples</h1>
+		<section id="intro">
 		</section>
+		<section>
+			<p>Page background is from <a href="http://subtlepatterns.com">subtlepatterns.com</a>
+		</section>
+		</article>
 	</body>
 </html>
