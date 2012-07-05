@@ -12,8 +12,8 @@ Parallax.Background = function(element, parameters) {
 		
 		var scrollOffset = this.scrollObject.getOffset(this.relative);
 		this.target.style.backgroundPosition = 
-				Math.round((this.target.clientWidth-this.width)/2 + scrollOffset.x/Math.pow(2, this.deapth)) + "px " +
-				Math.round((this.target.clientHeight-this.height)/2 + scrollOffset.y/Math.pow(2, this.deapth)) + "px";
+				Math.round((this.target.clientWidth-this.width)/2 - scrollOffset.x/Math.pow(2, this.deapth)) + "px " +
+				Math.round((this.target.clientHeight-this.height)/2 - scrollOffset.y/Math.pow(2, this.deapth)) + "px";
 	};
 	
 	this.setParameters = function(parameters) {
@@ -78,7 +78,6 @@ Parallax.Background = function(element, parameters) {
 	this.setParameters(parameters);
 	var elementParameters = Parallax.parseParametersFromElement(element);
 	this.setParameters(elementParameters);
-	this.target.style.backgroundAttachment = "fixed";
 	
 	if(this.width == null || this.hegith == null) {
 		this.getBackgroundSize(this.target, this);
