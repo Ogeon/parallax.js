@@ -1,5 +1,4 @@
 var Parallax = {
-	sections: new Array(),
 	iebody: null,
 	useIebody: false,
 	scrollPosition: 0,
@@ -11,50 +10,6 @@ var Parallax = {
 	elementTypes: new Object(),
 	scrollObjects: new Object(),
 	elements: new Array(),
-
-
-	/**
-	 * Initiates the parallax effects. Should be called when the page has
-	 * finnished loading (window.onload or later). It can safely be called
-	 * multiple times.
-	**/
-	init: function() {
-		if(!Parallax.useParallax)
-			return;
-
-		Parallax.sections = new Array();
-
-		//Search for parallax sections
-		var elements = document.getElementsByTagName("section");
-		for(var i = 0; i < elements.length; i++) {
-			if(elements[i].className == "parallax") {
-				Parallax.sections.push(new ParallaxSection(elements[i]));
-			}
-		}
-		
-		//console.log("Found "+Parallax.sections.length+" sections to update");
-		
-		//Compensate for retarded Internet Explorer and Chrome likes it too
-		Parallax.iebody =
-				(document.compatMode && document.compatMode != "BackCompat")?
-				document.documentElement : document.body;		
-		Parallax.useIebody = Parallax.iebody != null && document.all;
-		
-		//Set positions on load
-		var scrollOffset = Parallax.useIebody?
-				Parallax.iebody.scrollTop : pageYOffset;
-		for(var i = 0; i < Parallax.sections.length; i++) {
-				Parallax.sections[i].update(scrollOffset);
-		}
-
-		Parallax.step(true);
-			
-	},
-	
-	autoInit: function() {
-		Parallax.init();
-		Parallax.searchDocument();
-	},
 	
 	searchDocument: function() {
 		var checkElement = function(element) {
@@ -157,10 +112,6 @@ var Parallax = {
 		}
 		
 		return object;
-	},
-
-	addElement: function(parallaxElement) {
-		Parallax.sections.push(parallaxElement);
 	},
 	
 	parseParametersFromElement: function(element) {
