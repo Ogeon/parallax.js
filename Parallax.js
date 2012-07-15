@@ -4,7 +4,6 @@ var Parallax = {
 	scrollPosition: 0,
 	scrollOffset: 0,
 	scrollTimeout: null,
-	useParallax: true,
 	windowSize: null,
 	
 	elementTypes: new Object(),
@@ -40,8 +39,6 @@ var Parallax = {
 	 * This method should be called when the user scrolls the page.
 	**/
 	onscroll: function() {
-		if(!Parallax.useParallax)
-			return;
 		
 		Parallax.scrollOffset = Parallax.useIebody?
 				Parallax.iebody.scrollTop : pageYOffset;
@@ -59,8 +56,6 @@ var Parallax = {
 	 * triggered with Parallax.init().
 	**/
 	step: function(force) {
-		if(!Parallax.useParallax)
-			return;
 		var offset = Parallax.scrollOffset;
 		//Only run when the position actually changes
 		if(offset != Parallax.scrollPosition || force) {
@@ -85,19 +80,6 @@ var Parallax = {
 
 		
 		
-	},
-
-	/**
-	 * Enables or disables the parallax effects. It will stop the initiation of
-	 * the effects if called with false before Parallax.init() is called. The
-	 * parallax effects are enabled as default.
-	 *
-	 * Parameters:
-	 * enable - pass true if the parallax effects should be used. Pass false
-	 * 			otherwise.
-	**/
-	enable: function(enable) {
-		Parallax.useParallax = enable;
 	},
 	
 	add: function(parallaxElement) {
