@@ -1,9 +1,8 @@
 var Parallax = {
 	iebody: null,
 	useIebody: false,
-	scrollPosition: 0,
-	scrollOffset: 0,
-	scrollTimeout: null,
+	scrollPositionOld: 0,
+	scrollPositionNew: 0,
 	windowSize: null,
 	
 	elementTypes: new Object(),
@@ -40,7 +39,7 @@ var Parallax = {
 	**/
 	onscroll: function() {
 		
-		Parallax.scrollOffset = Parallax.useIebody?
+		Parallax.scrollPositionNew = Parallax.useIebody?
 				Parallax.iebody.scrollTop : pageYOffset;
 
 		Parallax.step();
@@ -56,9 +55,8 @@ var Parallax = {
 	 * triggered with Parallax.init().
 	**/
 	step: function(force) {
-		var offset = Parallax.scrollOffset;
 		//Only run when the position actually changes
-		if(offset != Parallax.scrollPosition || force) {
+		if(Parallax.scrollPositionNew != Parallax.scrollPositionOld || force) {
 			var scrollObjects = Parallax.scrollObjects;
 			for (var k in scrollObjects) {
 				if (scrollObjects.hasOwnProperty(k)) {
@@ -71,15 +69,10 @@ var Parallax = {
 					elements[i].update();
 			}
 
-			Parallax.scrollPosition = Parallax.scrollOffset;
+			Parallax.scrollPositionOld = Parallax.scrollPositionNew;
 			
-			Parallax.scrollTimeout = setTimeout("Parallax.step()", 1000/60);
-		} else {
-			//Parallax.scrollTimeout = setTimeout("Parallax.step()", 1000/10);
+			setTimeout("Parallax.step()", 1000/60);
 		}
-
-		
-		
 	},
 	
 	add: function(parallaxElement) {
@@ -118,7 +111,6 @@ var Parallax = {
 			}
 		}
 		
-		console.log(parameters);
 		return parameters;
 	},
 	
