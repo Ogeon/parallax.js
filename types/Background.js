@@ -24,6 +24,8 @@ Parallax.Background = function(element, parameters) {
 	this.deapth = 0;
 	this.width = null;
 	this.height = null;
+	this.position = [0, 0];
+	this.alignment = [.5, .5];
 	
 	this.update = function() {
 		if(!this.scrollObject.inView())
@@ -31,8 +33,8 @@ Parallax.Background = function(element, parameters) {
 		
 		var scrollOffset = this.scrollObject.getOffset(this.relative);
 		this.target.style.backgroundPosition = 
-				Math.round((this.target.clientWidth-this.width)/2 - scrollOffset.x/Math.pow(2, this.deapth)) + "px " +
-				Math.round((this.target.clientHeight-this.height)/2 - scrollOffset.y/Math.pow(2, this.deapth)) + "px";
+				Math.round(this.target.clientWidth*this.alignment[0]-this.width/2 - scrollOffset.x/Math.pow(2, this.deapth) + this.position[0]) + "px " +
+				Math.round(this.target.clientHeight*this.alignment[1]-this.height/2 - (scrollOffset.y-scrollOffset.y/Math.pow(2, this.deapth)) + this.position[1]) + "px";
 	};
 	
 	this.setParameters = function(parameters) {
@@ -50,7 +52,36 @@ Parallax.Background = function(element, parameters) {
 			
 		if(typeof parameters["height"] == "number")
 			this.height = parameters["height"];
-			
+
+		if(typeof parameters["position"] == "object")
+			if(parameters["position"].length > 1)
+				this.position = [parameters["position"][0], parameters["position"][1]]
+		
+		if(typeof parameters["alignment"] == "object")
+			if(parameters["alignment"].length > 1) {
+				switch (parameters["alignment"][0]) {
+					case "left":
+						this.alignment[0] = 0;
+						break;
+					case "right":
+						this.alignment[0] = 1;
+						break;
+					default:
+						this.alignment[0] = .5;
+						break;
+				}
+				switch (parameters["alignment"][1]) {
+					case "top":
+						this.alignment[1] = 0;
+						break;
+					case "bottom":
+						this.alignment[1] = 1;
+						break;
+					default:
+						this.alignment[1] = .5;
+						break;
+				}
+			}
 	};
 	
 	this.getBackgroundSize = function(obj, caller) {

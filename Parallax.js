@@ -23,11 +23,44 @@ var Parallax = {
 	scrollPositionOld: 0,
 	scrollPositionNew: 0,
 	windowSize: null,
+	scrollbarWidth: null,
 	
 	elementTypes: new Object(),
 	scrollObjects: new Object(),
 	elements: new Array(),
+
+	idCounter: 0,
 	
+	getScrollBarWidth: function () {
+		if(Parallax.scrollbarWidth != null)
+			return Parallax.scrollbarWidth;
+
+
+		var inner = document.createElement('p');
+		inner.style.width = "100%";
+		inner.style.height = "200px";
+
+		var outer = document.createElement('div');
+		outer.style.position = "absolute";
+		outer.style.top = "0px";
+		outer.style.left = "0px";
+		outer.style.visibility = "hidden";
+		outer.style.width = "200px";
+		outer.style.height = "150px";
+		outer.style.overflow = "hidden";
+		outer.appendChild (inner);
+
+		document.body.appendChild (outer);
+		var w1 = inner.offsetWidth;
+		outer.style.overflow = 'scroll';
+		var w2 = inner.offsetWidth;
+		if (w1 == w2) w2 = outer.clientWidth;
+
+		document.body.removeChild (outer);
+
+		return Parallax.scrollbarWidth = (w1 - w2);
+	},
+
 	searchDocument: function() {
 		var checkElement = function(element) {
 			if(element.className) {
@@ -82,7 +115,7 @@ var Parallax = {
 
 	onresize: function() {
 		Parallax.windowSize = null;
-		Parallax.step(true);
+		Parallax.onscroll(true);
 	},
 	
 	add: function(parallaxElement) {
@@ -90,10 +123,12 @@ var Parallax = {
 	},
 	
 	getScrollObject: function(element) {
-		var object = Parallax.scrollObjects[element];
+		var object = Parallax.scrollObjects[element.getAttribute("data-ParallaxID")];
 		if(typeof object == "undefined") {
+			element.setAttribute("data-ParallaxID", Parallax.idCounter);
+			Parallax.idCounter ++;
 			object = new Parallax.ScrollObject(element);
-			Parallax.scrollObjects[element] = object;
+			Parallax.scrollObjects[element.getAttribute("data-ParallaxID")] = object;
 		}
 		
 		return object;
@@ -110,18 +145,31 @@ var Parallax = {
 				if(pair.length != 2)
 					continue;
 				
-				var value = pair[1].trim();
-			
-				if(value.toLowerCase() == "true" || value.toLowerCase() == "false")
-					parameters[pair[0].trim()] = value.toLowerCase() == "true";
-				else if((value.endsWith("px") || value.endsWith("%")) && typeof parseFloat(value) != "NaN")
+				var value = pair[1].trim().split(" ");
+
+				if(value.length == 1)
+					parameters[pair[0].trim()] = Parallax.fixParameterDataType(value[0].trim());
+				else {
+					for(var j = value.length; j--;)
+						value[j] = Parallax.fixParameterDataType(value[j].trim());
+
 					parameters[pair[0].trim()] = value;
-				else if(typeof parseFloat(value) != "NaN")
-					parameters[pair[0].trim()] = parseFloat(value);
+				}
 			}
 		}
 		
 		return parameters;
+	},
+
+	fixParameterDataType: function(value) {
+		if(value.toLowerCase() == "true" || value.toLowerCase() == "false")
+			return value.toLowerCase() == "true";
+		else if((value.endsWith("px") || value.endsWith("%")) && typeof parseFloat(value) != "NaN")
+			return value;
+		else if(""+parseFloat(value) != "NaN")
+			return parseFloat(value);
+
+		return value;
 	},
 	
 	windowWidth: function() {
@@ -163,7 +211,7 @@ var Parallax = {
 			winH = window.innerHeight;
 		}
 
-		Parallax.windowSize = [winW, winH];
+		Parallax.windowSize = [winW-Parallax.getScrollBarWidth(), winH];
 	}
 };
 
