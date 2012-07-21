@@ -27,7 +27,12 @@
 		<script type="text/javascript" src="../types/Background.js"></script>
 		
 		<script type="text/javascript">
-			window.onscroll = Parallax.onscroll;
+			window.addEventListener("scroll", Parallax.onscroll);
+			if (window.addEventListener)
+				/** DOMMouseScroll is for mozilla. */
+				window.addEventListener('DOMMouseScroll', Parallax.onscroll, false);
+			/** IE/Opera. */
+			window.onmousewheel = document.onmousewheel = Parallax.onscroll;
 			window.onresize = Parallax.onresize;
 			window.onload = Parallax.searchDocument;
 		</script>
@@ -54,7 +59,8 @@
 				background: white;
 				border: 10px solid white;
 				text-align: left;
-				box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+				box-shadow: 0 0 50px rgba(0, 0, 0, 0.2), 0 0 30px rgba(0, 0, 0, .2) inset;
+				background: url(http://subtlepatterns.com/patterns/gplaypattern.png);
 			}
 			
 			h1 {
@@ -68,6 +74,7 @@
 				background: rgba(255, 255, 255, .7);
 				position: relative;
 				padding: 5px;
+				box-shadow: 0 0 30px rgba(0, 0, 0, .1);
 			}
 
 			p {
@@ -108,8 +115,9 @@
 	</head>
 	<body class="ParallaxBackground" data-parallax="deapth: 1;">
 		<article>
-		<h1>Parallax effect examples</h1>
-		<section id="intro">
+		<h1 class="ParallaxBackground" data-parallax="deapth: .6;">Parallax effect examples</h1>
+		<section id="intro" class="ParallaxBackground" data-parallax="deapth: .6;">
+			<p>This is an example of how the Parallax library can be used.</p>
 		</section>
 		<section id="positionDemo" class="ParallaxBackground" data-parallax="deapth: .6; position: -90 70;">
 			<div class="ParallaxBackground" data-parallax="deapth: .4; position: 0 70"></div>
@@ -130,7 +138,7 @@
 			<div class="ParallaxBackground" data-parallax="deapth: .2; alignment: left bottom"></div>
 			<div class="ParallaxBackground" data-parallax="deapth: .2; alignment: right top"></div>
 			<div class="ParallaxBackground" data-parallax="deapth: .2; alignment: right bottom"></div>
-			
+
 			<h2>Alignment</h2>
 			<p>
 				It is possible to align the parallax element to different parts
@@ -142,8 +150,8 @@
 			</p>
 		</section>
 
-		<section>
-			<p>Page background is from <a href="http://subtlepatterns.com">subtlepatterns.com</a>
+		<section class="ParallaxBackground" data-parallax="deapth: .6;">
+			<p>Some backgrounds are from <a href="http://subtlepatterns.com">subtlepatterns.com</a>
 		</section>
 		</article>
 	</body>

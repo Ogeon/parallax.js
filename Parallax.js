@@ -109,7 +109,8 @@ var Parallax = {
 
 			Parallax.scrollPositionOld = Parallax.scrollPositionNew;
 			
-			setTimeout("Parallax.onscroll()", 1000/60);
+			clearTimeout(Parallax.scrollTimeout);
+			Parallax.scrollTimeout = setTimeout("Parallax.onscroll()", 1000/60);
 		}
 	},
 
