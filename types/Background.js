@@ -91,7 +91,7 @@ Parallax.Background = function(element, parameters) {
 	this.setImageSize = function(size) {
 		this.width = size.w;
 		this.height = size.h;
-		Parallax.step(true);
+		this.update();
 	}
 	
 	this.setParameters(parameters);

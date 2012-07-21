@@ -50,30 +50,16 @@ var Parallax = {
 		
 		checkElement(document.body);
 		searchChildren(document.body);
-		Parallax.step(true);
+		Parallax.onscroll(true);
 	},
 
 	/**
 	 * This method should be called when the user scrolls the page.
 	**/
-	onscroll: function() {
+	onscroll: function(force) {
 		
 		Parallax.scrollPositionNew = Parallax.useIebody?
 				Parallax.iebody.scrollTop : pageYOffset;
-
-		Parallax.step();
-	},
-
-	onresize: function() {
-		Parallax.windowSize = null;
-		Parallax.step(true);
-	},
-
-	/**
-	 * Updates all parallax elements. This process is internal and will be
-	 * triggered with Parallax.init().
-	**/
-	step: function(force) {
 		//Only run when the position actually changes
 		if(Parallax.scrollPositionNew != Parallax.scrollPositionOld || force) {
 			var scrollObjects = Parallax.scrollObjects;
@@ -90,8 +76,13 @@ var Parallax = {
 
 			Parallax.scrollPositionOld = Parallax.scrollPositionNew;
 			
-			setTimeout("Parallax.step()", 1000/60);
+			setTimeout("Parallax.onscroll()", 1000/60);
 		}
+	},
+
+	onresize: function() {
+		Parallax.windowSize = null;
+		Parallax.step(true);
 	},
 	
 	add: function(parallaxElement) {
